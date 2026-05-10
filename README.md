@@ -1,1 +1,2 @@
 # tasbeh-app
+A Dua app is an application that helps users read, learn, and recite Islamic supplications (duas) for daily life, prayers, and special occasions. It often includes features like Arabic text, translations, audio recitations, and categorized duas for easy access and spiritual guidance.

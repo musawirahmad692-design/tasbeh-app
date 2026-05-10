@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dua App</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #243746;
+      --muted: #5f7184;
+      --accent: #2c7b7e;
+      --accent-soft: #d3eef0;
+      --border: rgba(36, 55, 70, 0.12);
+      --shadow: 0 28px 60px rgba(25, 58, 89, 0.08);
+      --radius: 24px;
+      --button: #1f6f72;
+      --button-hover: #14575a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e3f2fb 0%, var(--bg) 45%);
+      color: var(--text);
+    }
+
+    body.dark {
+      --bg: #111620;
+      --card: #15202b;
+      --text: #e8f1fb;
+      --muted: #a2b5cb;
+      --accent: #0098a9;
+      --accent-soft: rgba(0, 152, 169, 0.15);
+      --border: rgba(255, 255, 255, 0.12);
+      background: radial-gradient(circle at top, #1b2937 0%, #0b1118 55%);
+    }
+
+    body,
+    button,
+    input {
+      font-size: 16px;
+    }
+
+    .app {
+      max-width: 760px;
+      margin: 32px auto 48px;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.6vw, 2.8rem);
+      letter-spacing: -0.03em;
+    }
+
+    .darkbtn,
+    .searchbox button,
+    .buttons button {
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .darkbtn {
+      padding: 12px 18px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .darkbtn:hover {
+      transform: translateY(-1px);
+      background: rgba(44, 123, 126, 0.22);
+    }
+
+    .searchbox {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .searchbox input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.82);
+      color: var(--text);
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    body.dark .searchbox input {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .searchbox button {
+      padding: 14px 20px;
+      background: var(--button);
+      color: #fff;
+      font-weight: 700;
+      min-width: 130px;
+      box-shadow: 0 12px 24px rgba(31, 111, 114, 0.18);
+    }
+
+    .searchbox button:hover,
+    .buttons button:hover {
+      background: var(--button-hover);
+    }
+
+    .dua-card {
+      padding: 28px 28px 22px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(243,248,252,0.92) 100%);
+      border: 1px solid rgba(36, 55, 70, 0.08);
+      margin-bottom: 22px;
+    }
+
+    body.dark .dua-card {
+      background: linear-gradient(180deg, rgba(23,34,46,0.95) 0%, rgba(18,24,33,0.95) 100%);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .dua-title {
+      margin: 0 0 16px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .dua-card div {
+      margin-bottom: 14px;
+      line-height: 1.75;
+    }
+
+    .arabic {
+      font-size: 1.55rem;
+      font-weight: 700;
+      direction: rtl;
+      letter-spacing: 0.05em;
+    }
+
+    .trans,
+    .urdu {
+      color: var(--muted);
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      flex: 1 1 110px;
+      padding: 14px 16px;
+      background: rgba(44, 123, 126, 0.12);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    body.dark .buttons button {
+      background: rgba(0, 152, 169, 0.14);
+      color: #e8f1fb;
+    }
+
+    .counter {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.98rem;
+      letter-spacing: 0.02em;
+    }
+
+    .status {
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        margin: 20px 16px 36px;
+        padding: 20px;
+      }
+
+      .header,
+      .searchbox,
+      .buttons {
+        flex-direction: column;
+      }
+
+      .searchbox button,
+      .darkbtn,
+      .buttons button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>📿 Dua App</h1>
+      <button class="darkbtn" onclick="toggleDark()">🌙 Dark</button>
+    </div>
+
+    <div class="searchbox">
+      <input type="text" id="searchInput" placeholder="Search Dua (e.g. sleep, food, travel)">
+      <button onclick="searchDua()">Search</button>
+    </div>
+
+    <div class="status" id="statusMessage">Loading duas...</div>
+
+    <div class="dua-card">
+      <div class="dua-title" id="duaTitle">Loading...</div>
+      <div class="arabic" id="duaArabic">...</div>
+      <div class="trans" id="duaEnglish">...</div>
+      <div class="urdu" id="duaUrdu">...</div>
+    </div>
+
+    <div class="buttons">
+      <button class="prev" onclick="prevDua()">⬅ Prev</button>
+      <button class="play" onclick="playAudio()">🔊 Play</button>
+      <button class="stop" onclick="stopAudio()">⛔ Stop</button>
+      <button class="next" onclick="nextDua()">Next ➡</button>
+    </div>
+
+    <div class="counter" id="duaCounter">Dua 1 of 10</div>
+
+    <audio id="duaAudio"></audio>
+  </div>
+
+  <script>
+    const dataUrl = "duas.json";
+    const defaultDuas = [
+      {
+        title: "Dua Before Eating",
+        arabic: "بِسْمِ ٱللَّٰهِ وَعَلَىٰ بَرَكَةِ ٱللَّٰهِ",
+        english: "In the name of Allah and with the blessings of Allah.",
+        urdu: "اللہ کے نام سے اور اللہ کی برکت کے ساتھ۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-before-eating.mp3"
+      },
+      {
+        title: "Dua After Eating",
+        arabic: "ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِى أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مِنَ ٱلْمُسْلِمِينَ",
+        english: "All praise is for Allah who fed us and gave us drink and made us Muslims.",
+        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں کھلایا پلایا اور مسلمان بنایا۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-after-eating.mp3"
+      },
+      {
+        title: "Dua Before Sleeping",
+        arabic: "بِاسْمِكَ ٱللَّٰهُمَّ أَمُوتُ وَأَحْيَا",
+        english: "In Your name O Allah, I die and I live.",
+        urdu: "اے اللہ! تیرے نام کے ساتھ میں مرتا اور جیتا ہوں۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-before-sleeping.mp3"
+      },
+      {
+        title: "Dua After Waking Up",
+        arabic: "ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِى أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ ٱلنُّشُورُ",
+        english: "Praise is to Allah who gave us life after death and to Him is the return.",
+        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں موت کے بعد زندگی دی اور اسی کی طرف لوٹنا ہے۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-after-waking-up.mp3"
+      },
+      {
+        title: "Dua Entering Home",
+        arabic: "بِسْمِ ٱللَّٰهِ وَلَجْنَا وَبِسْمِ ٱللَّٰهِ خَرَجْنَا وَعَلَىٰ رَبِّنَا تَوَكَّلْنَا",
+        english: "In the name of Allah we enter and in the name of Allah we leave and upon our Lord we rely.",
+        urdu: "اللہ کے نام سے ہم داخل ہوئے اور اللہ کے نام سے نکلے اور اپنے رب پر بھروسہ کیا۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-entering-home.mp3"
+      },
+      {
+        title: "Dua Leaving Home",
+        arabic: "بِسْمِ ٱللَّٰهِ تَوَكَّلْتُ عَلَى ٱللَّٰهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّٰهِ",
+        english: "In the name of Allah, I trust in Allah. There is no power except with Allah.",
+        urdu: "اللہ کے نام سے، میں اللہ پر بھروسہ کرتا ہوں، طاقت صرف اللہ کی ہے۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-leaving-home.mp3"
+      },
+      {
+        title: "Dua Entering Mosque",
+        arabic: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+        english: "O Allah, open for me the doors of Your mercy.",
+        urdu: "اے اللہ! میرے لیے اپنی رحمت کے دروازے کھول دے۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-entering-mosque.mp3"
+      },
+      {
+        title: "Dua Leaving Mosque",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+        english: "O Allah, I ask You from Your bounty.",
+        urdu: "اے اللہ! میں تجھ سے تیرا فضل مانگتا ہوں۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-leaving-mosque.mp3"
+      },
+      {
+        title: "Dua For Forgiveness",
+        arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنتَ التَّوَّابُ الرَّحِيمُ",
+        english: "My Lord forgive me and accept my repentance. Indeed You are the Accepter of repentance, the Merciful.",
+        urdu: "اے میرے رب! مجھے معاف کر اور میری توبہ قبول فرما، بے شک تو توبہ قبول کرنے والا مہربان ہے۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-for-forgiveness.mp3"
+      },
+      {
+        title: "Dua For Parents",
+        arabic: "رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+        english: "My Lord, have mercy upon them as they brought me up when I was small.",
+        urdu: "اے میرے رب! میرے والدین پر رحم فرما جیسے انہوں نے مجھے بچپن میں پالا۔",
+        audio: "https://www.islamcan.com/audio/dua/dua-for-parents.mp3"
+      }
+    ];
+
+    let duas = defaultDuas;
+    let currentIndex = 0;
+    const audioPlayer = document.getElementById("duaAudio");
+    const statusMessage = document.getElementById("statusMessage");
+
+    function showStatus(message) {
+      statusMessage.textContent = message;
+    }
+
+    function showDua(index) {
+      const dua = duas[index];
+      document.getElementById("duaTitle").innerText = dua.title;
+      document.getElementById("duaArabic").innerText = dua.arabic;
+      document.getElementById("duaEnglish").innerText = "English: " + dua.english;
+      document.getElementById("duaUrdu").innerText = "Urdu: " + dua.urdu;
+      document.getElementById("duaCounter").innerText = `Dua ${index + 1} of ${duas.length}`;
+      audioPlayer.src = dua.audio;
+      showStatus("Ready. Use search or controls to navigate.");
+    }
+
+    function loadDuas() {
+      fetch(dataUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (Array.isArray(data) && data.length > 0) {
+            duas = data;
+          }
+        })
+        .catch((error) => {
+          console.warn("Could not load duas.json, using fallback data.", error);
+          showStatus("Offline fallback active: using built-in dua list.");
+        })
+        .finally(() => {
+          showDua(currentIndex);
+        });
+    }
+
+    function nextDua() {
+      stopAudio();
+      currentIndex = (currentIndex + 1) % duas.length;
+      showDua(currentIndex);
+    }
+
+    function prevDua() {
+      stopAudio();
+      currentIndex = (currentIndex - 1 + duas.length) % duas.length;
+      showDua(currentIndex);
+    }
+
+    function playAudio() {
+      audioPlayer.play();
+    }
+
+    function stopAudio() {
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+    }
+
+    function searchDua() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      if (!query) {
+        showStatus("Type a keyword and press Search.");
+        return;
+      }
+      const foundIndex = duas.findIndex((d) =>
+        d.title.toLowerCase().includes(query) ||
+        d.english.toLowerCase().includes(query) ||
+        d.urdu.toLowerCase().includes(query)
+      );
+      if (foundIndex !== -1) {
+        currentIndex = foundIndex;
+        showDua(currentIndex);
+      } else {
+        showStatus("No dua found for that search term.");
+      }
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+    }
+
+    loadDuas();
+  </script>
+</body>
+</html>
